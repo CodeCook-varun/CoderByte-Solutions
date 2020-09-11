@@ -1,0 +1,66 @@
+function ShortestPath(strArr) {
+  
+  
+    function extractVertices(strArr) {
+    const totalVertices = parseInt(strArr[0]);
+    const vertices = strArr.slice(1, totalVertices+1);
+    return vertices;
+  }
+
+  function extractConnections(strArr) {
+    const totalVertices = parseInt(strArr[0]);
+    const conns = strArr.slice(totalVertices+1, strArr.length+1);
+    return conns;
+  }
+
+  const vertices = extractVertices(strArr);
+  const connections = extractConnections(strArr);
+
+  const conLen = connections.length;
+
+
+  function shortestPath() {
+    const verLen = vertices.length;
+    const shortest = [];
+    const path = [];
+    let noPath = 1;
+    let result = "";
+
+    for(let i=0; i< vertices.length - 1;) {
+      const pick_1 = vertices[i];
+      noPath = 1;
+      let flag = 0;
+      
+      for(let j=verLen -1; j>0; j--) {
+        if(j === i) continue;
+        const pick_2 = vertices[j];
+        const conn = pick_1 + "-"+ pick_2;
+        if(connections.includes(conn)) {
+          flag = 1;
+          noPath = 0;
+          i = j;
+          path.push(pick_1);
+          shortest.push(conn);
+          // console.log("path", pick_1, pick_2);
+          result += pick_1 + "-";
+          if(i === verLen - 1 ) {
+            // console.log("push pick_2", pick_2); 
+            path.push(pick_2);
+            result += pick_2;
+          }
+        } else {
+          if(i === verLen - 2 && j === 1) break;
+        }
+        if(i === 0 && flag === 0) {
+          noPath = 1;
+        }
+        if(flag === 1) break;
+      }
+      if(noPath === 1) break;
+    }
+    if(noPath === 1) return -1;
+    return result;
+  }
+  const shortest = shortestPath();
+  return shortest;
+}
